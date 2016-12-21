@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Epic Button Game</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src = "/socket.io/socket.io.js"></script> -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script type ="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        // alert("Jquery Loaded");
+        var socket = io.connect();
+        $('#push').click(function(){
+          socket.emit('push_button',{respnse:'someone pushed the button'});
+        })
+        socket.on('push_counter', function(data){
+          // console.log('push_counter on is:', data);
+          $('#message').html("The button has been pushed "+JSON.stringify(data.number)+" Time(s)");
+        })
+
+        $('#reset').click(function(){
+          socket.emit('reset_button', {reason:'reset the button to zero'});
+          socket.on('reset_zero', function(data){
+            $('#message').html("The button has been pushed "+JSON.stringify(data.count)+" Time(s)");
+          })
+      })
+    })
+    </script>
+  </head>
+  <body>
+    <center>
+    <h1>Hello, Epic Button Game players</h1>
+    <h2 id="message"></h2>
+
+      <h3>Push the button to update the count!</h3>
+      <button id="push">Push the epic button</button>
+      <button id="reset">Reset Count</button>
+    </center>
+  </body>
+</html>
